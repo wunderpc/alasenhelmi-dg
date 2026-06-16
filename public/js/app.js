@@ -288,6 +288,7 @@ async function login(nickname) {
   });
   currentUser = data.user;
   updateUserArea();
+  if (!useLocalApi) await migrateLocalScores();
   await loadMyRounds();
   showToast(`Tervetuloa, ${currentUser.nickname}!`);
   if (pendingPlayAfterLogin) {
@@ -638,12 +639,37 @@ async function detectApiMode() {
   useLocalApi = true;
 }
 
+async function migrateLocalScores() {
+  if (useLocalApi) return;
+  try {
+    const raw = localStorage.getItem("alasen-helmi-db");
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (!data.rounds?.length) return;
+
+    await api("/api/migrate", {
+      method: "POST",
+      body: JSON.stringify({
+        users: data.users || [],
+        rounds: data.rounds || [],
+        sessionUserId: data.sessionUserId,
+      }),
+    });
+
+    localStorage.removeItem("alasen-helmi-db");
+    localStorage.removeItem("alasen-helmi-deleted");
+  } catch (err) {
+    console.warn("Local score migration failed:", err);
+  }
+}
+
 async function init() {
   bindEvents();
   await detectApiMode();
   await loadCourse();
   initRoundScores();
   await checkSession();
+  if (!useLocalApi) await migrateLocalScores();
   await loadLeaderboard();
   if (currentUser) await loadMyRounds();
 }

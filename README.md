@@ -12,12 +12,22 @@ A simple scorebook web app for the **Alasen Helmi** disc golf course (6 holes, p
 ## Hosting on Netlify
 
 1. Connect this GitHub repo in [Netlify](https://app.netlify.com/).
-2. Build settings (also set in `netlify.toml`):
+2. Build settings (also in `netlify.toml`):
+   - **Build command:** `npm install`
    - **Publish directory:** `public`
-   - **Build command:** leave empty (static site)
 3. Deploy.
 
-The site uses browser storage on Netlify (no server required). Scores in `public/data/scores.json` are shown to all visitors when that file is updated in the repo.
+Scores are saved to **Netlify Blobs** (shared for all visitors). Each saved round appears on the public leaderboard immediately.
+
+### Optional: publish scores to GitHub
+
+To also write scores into `public/data/scores.json` in the repo (visible on GitHub and GitHub Pages):
+
+1. Create a [GitHub personal access token](https://github.com/settings/tokens) with **Contents: Read and write** on this repo.
+2. In Netlify → **Site configuration → Environment variables**, add:
+   - `GITHUB_TOKEN` = your token
+
+After each save, the function updates `public/data/scores.json` in the repo.
 
 ## Hosting on GitHub Pages
 
