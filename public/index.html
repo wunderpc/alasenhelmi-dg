@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Alasen Helmi — Frisbeegolf</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="page-wrap">
+  <header class="header" id="mainHeader">
+    <div class="header-inner">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/>
+          <path d="M16 6v20M10 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <h1>Alasen Helmi</h1>
+          <p class="subtitle">6 väylää · Par 18 · 278 m</p>
+        </div>
+      </div>
+      <nav class="nav" id="mainNav">
+        <button class="nav-btn active" data-view="leaderboard">Tulostaulu</button>
+        <button class="nav-btn" data-view="profile">Profiili</button>
+      </nav>
+      <div class="user-area" id="userArea">
+        <button class="btn btn-ghost" id="loginBtn">Kirjaudu nimellä</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- Home / Leaderboard -->
+    <section class="view active" id="view-leaderboard">
+      <div class="hero-cta">
+        <button class="btn btn-play" id="playRoundBtn">Pelaa kierros</button>
+        <p class="hero-desc">Pelaa väylät yksi kerrallaan ja tallenna tuloksesi</p>
+      </div>
+
+      <div class="stats-row" id="statsRow"></div>
+
+      <div class="card">
+        <h2>Parhaat tulokset</h2>
+        <p class="card-desc">Paras kierros per pelaaja · napauta kierrosta</p>
+        <div class="table-wrap">
+          <table class="table table-clickable" id="leaderboardTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Pelaaja</th>
+                <th>Tulos</th>
+                <th>± Par</th>
+                <th>Päivä</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm show-more-btn hidden" id="lbShowMore">Näytä lisää</button>
+        <p class="empty-msg hidden" id="leaderboardEmpty">Ei vielä kierroksia. Ole ensimmäinen!</p>
+      </div>
+
+      <div class="card">
+        <h2>Viimeisimmät kierrokset</h2>
+        <p class="card-desc">Napauta kierrosta nähdäksesi yhteenvedon</p>
+        <div class="table-wrap">
+          <table class="table table-clickable" id="recentTable">
+            <thead>
+              <tr>
+                <th>Pelaaja</th>
+                <th>Tulos</th>
+                <th>± Par</th>
+                <th>Päivä</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm show-more-btn hidden" id="recentShowMore">Näytä lisää</button>
+      </div>
+    </section>
+
+    <!-- Profile -->
+    <section class="view" id="view-profile">
+      <div class="card" id="profileLoginPrompt">
+        <h2>Profiili</h2>
+        <p class="card-desc">Kirjaudu nimimerkillä nähdäksesi omat kierroksesi.</p>
+        <button class="btn btn-primary" id="profileLoginBtn">Kirjaudu nimellä</button>
+      </div>
+
+      <div class="card hidden" id="profileCard">
+        <div class="profile-header">
+          <h2 id="profileName">Profiili</h2>
+          <button class="btn btn-ghost btn-sm" id="profileLogoutBtn">Kirjaudu ulos</button>
+        </div>
+        <h3 class="section-title">Omat kierrokset</h3>
+        <div class="rounds-list" id="myRoundsList"></div>
+      </div>
+    </section>
+
+    <!-- Active round -->
+    <section class="view" id="view-play">
+      <div class="play-topbar">
+        <button class="btn btn-ghost btn-sm" id="exitRound">Lopeta</button>
+        <div class="play-progress" id="playProgress"></div>
+        <div class="running-total running-total-compact">
+          <span class="running-score" id="runningTotal">18</span>
+          <span class="running-par" id="runningPar">E</span>
+        </div>
+      </div>
+
+      <div class="card play-card">
+        <div class="play-hole-header">
+          <span class="play-hole-label" id="playHoleLabel">Väylä 1</span>
+          <span class="play-hole-meta" id="playHoleMeta">Par 3 · 38 m</span>
+        </div>
+
+        <div class="hole-map">
+          <img id="holeMapImg" src="" alt="Väyläkartta" />
+        </div>
+
+        <div class="play-score-section">
+          <p class="play-score-label">Heitot</p>
+          <div class="score-controls score-controls-lg">
+            <button class="score-btn score-btn-lg" id="decScore" aria-label="Vähennä">−</button>
+            <div id="currentScoreWrap"></div>
+            <button class="score-btn score-btn-lg" id="incScore" aria-label="Lisää">+</button>
+          </div>
+          <p class="score-relative" id="scoreRelative"></p>
+        </div>
+
+        <div class="play-nav">
+          <button class="btn btn-ghost" id="prevHole" disabled>Edellinen</button>
+          <button class="btn btn-primary" id="nextHole">Seuraava väylä</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="admin-footer" id="adminFooter">
+    <div class="admin-footer-inner">
+      <button class="admin-toggle" id="adminToggle" type="button">Admin</button>
+      <div class="admin-panel hidden" id="adminPanel">
+        <form id="adminLoginForm" class="admin-login-form">
+          <input type="text" id="adminUser" placeholder="Käyttäjätunnus" autocomplete="username" />
+          <input type="password" id="adminPass" placeholder="Salasana" autocomplete="current-password" />
+          <button type="submit" class="btn btn-sm btn-primary">Kirjaudu</button>
+        </form>
+        <div class="admin-logged-in hidden" id="adminLoggedIn">
+          <span class="admin-badge">Admin: Jone</span>
+          <button class="btn btn-sm btn-danger" id="resetScoreboard" type="button">Tyhjennä tulostaulu</button>
+          <button class="btn btn-sm btn-ghost" id="adminLogoutBtn" type="button">Kirjaudu ulos</button>
+        </div>
+        <p class="error-msg hidden" id="adminError"></p>
+      </div>
+    </div>
+  </footer>
+
+  </div>
+
+  <!-- Login modal -->
+  <dialog class="modal modal-centered" id="loginModal">
+    <form method="dialog" id="loginForm">
+      <h2>Tervetuloa</h2>
+      <p class="modal-desc">Valitse nimimerkki pelataksesi. Salasanaa ei tarvita.</p>
+      <label for="nicknameInput">Nimimerkki</label>
+      <input
+        type="text"
+        id="nicknameInput"
+        placeholder="esim. EagleEye"
+        maxlength="24"
+        autocomplete="nickname"
+        required
+      />
+      <p class="error-msg hidden" id="loginError"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancelLogin">Peruuta</button>
+        <button type="submit" class="btn btn-primary">Jatka</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Round overview modal -->
+  <dialog class="modal modal-centered modal-wide" id="roundModal">
+    <div id="roundModalContent">
+      <div class="round-modal-header">
+        <div>
+          <p class="round-modal-course">Alasen Helmi</p>
+          <h2 id="roundModalTitle">Kierros</h2>
+        </div>
+        <button type="button" class="modal-close" id="closeRoundModal" aria-label="Sulje">×</button>
+      </div>
+      <p class="round-modal-time" id="roundModalTime"></p>
+      <p class="round-modal-meta" id="roundModalMeta"></p>
+      <div class="round-overview-grid" id="roundOverviewGrid"></div>
+      <div class="round-modal-summary" id="roundModalSummary"></div>
+      <div class="round-modal-actions hidden" id="roundModalAdminActions">
+        <button type="button" class="btn btn-danger btn-sm" id="deleteRoundBtn">Poista kierros</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Exit round confirm -->
+  <dialog class="modal modal-centered" id="exitModal">
+    <form method="dialog" id="exitForm">
+      <h2>Lopetetaanko kierros?</h2>
+      <p class="modal-desc">Tallentamaton kierros menetetään.</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancelExit">Jatka pelaamista</button>
+        <button type="submit" class="btn btn-primary" id="confirmExit">Lopeta</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Reset confirm -->
+  <dialog class="modal modal-centered" id="resetModal">
+    <form method="dialog" id="resetForm">
+      <h2>Tyhjennetäänkö tulostaulu?</h2>
+      <p class="modal-desc">Kaikki kierrokset poistetaan pysyvästi.</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancelReset">Peruuta</button>
+        <button type="submit" class="btn btn-danger">Tyhjennä kaikki</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast hidden" id="toast"></div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
