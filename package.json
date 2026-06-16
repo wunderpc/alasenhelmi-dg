@@ -1,0 +1,15 @@
+{
+  "name": "alasen-helmi-scorebook",
+  "version": "1.0.0",
+  "description": "Disc golf scorebook for Alasen Helmi course",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.7.0",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1"
+  }
+}
