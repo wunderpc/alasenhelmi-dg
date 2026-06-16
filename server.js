@@ -53,7 +53,7 @@ app.use(
   })
 );
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/images", express.static(__dirname));
+app.use("/images", express.static(path.join(__dirname, "public", "images")));
 
 app.get("/api/course", (_req, res) => {
   res.json(COURSE);
@@ -134,7 +134,7 @@ app.get("/api/leaderboard", (_req, res) => {
   const bestRounds = db
     .prepare(
       `
-    SELECT u.nickname, r.total_score, r.score_to_par, r.scores, r.created_at
+    SELECT r.id, u.nickname, r.total_score, r.score_to_par, r.scores, r.created_at
     FROM rounds r
     JOIN users u ON u.id = r.user_id
     WHERE r.id IN (
@@ -151,7 +151,7 @@ app.get("/api/leaderboard", (_req, res) => {
   const recentRounds = db
     .prepare(
       `
-    SELECT u.nickname, r.total_score, r.score_to_par, r.created_at
+    SELECT r.id, u.nickname, r.total_score, r.score_to_par, r.created_at
     FROM rounds r
     JOIN users u ON u.id = r.user_id
     ORDER BY r.created_at DESC

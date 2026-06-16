@@ -9,7 +9,20 @@ A simple scorebook web app for the **Alasen Helmi** disc golf course (6 holes, p
 - **Public leaderboard** — best score per player, plus recent rounds
 - **Dark theme** — forest green palette inspired by the course
 
-## Quick start
+## Live website (GitHub Pages)
+
+The app can run as a static site from this repository:
+
+1. Push to GitHub (`main` or `master` branch).
+2. In the repo, go to **Settings → Pages**.
+3. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+4. After the workflow runs, the site is available at:
+
+   `https://<your-username>.github.io/alasenhelmi-dg/`
+
+On GitHub Pages, scores are stored in your browser (localStorage). Everyone sees rounds listed in `public/data/scores.json` when that file is updated in the repo. To publish scores for all visitors, export or edit that JSON file and commit it.
+
+## Local development
 
 **Python (recommended — no install needed):**
 
@@ -26,6 +39,8 @@ npm start
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+With a local server, scores are stored in `scores.db` (SQLite) and shared across all users on that server.
+
 ## Course layout
 
 | Hole | Par | Distance |
@@ -36,5 +51,3 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 | 4    | 3   | 45 m     |
 | 5    | 3   | 59 m     |
 | 6    | 3   | 39 m     |
-
-Scores are stored in `scores.db` (SQLite) in the project folder.

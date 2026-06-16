@@ -17,7 +17,17 @@ const TZ = "Europe/Helsinki";
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
+let useLocalApi = window.localApi?.isStaticHost?.() ?? false;
+
 async function api(path, options = {}) {
+  if (useLocalApi) {
+    try {
+      return await window.localApi.handle(path, options);
+    } catch (err) {
+      throw new Error(err.message || "Jokin meni pieleen");
+    }
+  }
+
   const res = await fetch(path, {
     headers: { "Content-Type": "application/json" },
     credentials: "same-origin",
@@ -610,8 +620,19 @@ function bindEvents() {
   });
 }
 
+async function detectApiMode() {
+  if (useLocalApi) return;
+  try {
+    const res = await fetch("/api/me", { credentials: "same-origin" });
+    if (!res.ok) useLocalApi = true;
+  } catch {
+    useLocalApi = true;
+  }
+}
+
 async function init() {
   bindEvents();
+  await detectApiMode();
   await loadCourse();
   initRoundScores();
   await checkSession();

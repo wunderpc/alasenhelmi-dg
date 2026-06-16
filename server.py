@@ -22,7 +22,7 @@ except Exception:
 ROOT = Path(__file__).parent
 DB_PATH = ROOT / "scores.db"
 PUBLIC = ROOT / "public"
-IMAGES = ROOT
+IMAGES = PUBLIC / "images"
 
 COURSE = {
     "name": "Alasen Helmi",
