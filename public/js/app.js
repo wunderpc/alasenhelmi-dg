@@ -17,11 +17,11 @@ const TZ = "Europe/Helsinki";
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
+let useLocalApi = false;
+
 function isLocalDevServer() {
   return location.hostname === "localhost" || location.hostname === "127.0.0.1";
 }
-
-let useLocalApi = !isLocalDevServer();
 
 async function api(path, options = {}) {
   if (useLocalApi) {
@@ -625,16 +625,17 @@ function bindEvents() {
 }
 
 async function detectApiMode() {
-  if (useLocalApi) return;
   try {
     const res = await fetch("/api/me", { credentials: "same-origin" });
     const data = await res.json().catch(() => null);
-    if (!res.ok || !data || typeof data.loggedIn !== "boolean") {
-      useLocalApi = true;
+    if (res.ok && data && typeof data.loggedIn === "boolean") {
+      useLocalApi = false;
+      return;
     }
   } catch {
-    useLocalApi = true;
+    /* no server API */
   }
+  useLocalApi = true;
 }
 
 async function init() {
