@@ -9,18 +9,25 @@ A simple scorebook web app for the **Alasen Helmi** disc golf course (6 holes, p
 - **Public leaderboard** — best score per player, plus recent rounds
 - **Dark theme** — forest green palette inspired by the course
 
-## Live website (GitHub Pages)
+## Hosting on Netlify
 
-The app can run as a static site from this repository:
+1. Connect this GitHub repo in [Netlify](https://app.netlify.com/).
+2. Build settings (also set in `netlify.toml`):
+   - **Publish directory:** `public`
+   - **Build command:** leave empty (static site)
+3. Deploy.
 
-1. Push to GitHub (`main` or `master` branch).
-2. In the repo, go to **Settings → Pages**.
-3. Under **Build and deployment**, set **Source** to **GitHub Actions**.
-4. After the workflow runs, the site is available at:
+The site uses browser storage on Netlify (no server required). Scores in `public/data/scores.json` are shown to all visitors when that file is updated in the repo.
 
-   `https://<your-username>.github.io/alasenhelmi-dg/`
+## Hosting on GitHub Pages
 
-On GitHub Pages, scores are stored in your browser (localStorage). Everyone sees rounds listed in `public/data/scores.json` when that file is updated in the repo. To publish scores for all visitors, export or edit that JSON file and commit it.
+1. Push to the `main` branch.
+2. Go to **Settings → Pages**.
+3. Under **Build and deployment**, set **Source** to **Deploy from a branch**.
+4. Choose branch **`gh-pages`**, folder **`/ (root)`**.
+5. The workflow `.github/workflows/deploy-pages.yml` updates `gh-pages` on each push to `main`.
+
+Site URL: `https://<username>.github.io/alasenhelmi-dg/`
 
 ## Local development
 
